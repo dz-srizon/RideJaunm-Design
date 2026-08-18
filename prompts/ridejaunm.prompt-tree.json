@@ -1,0 +1,302 @@
+{
+  "$schema": "https://ridejaunm.design/schemas/prompt-tree/v1.json",
+  "name": "RideJaunm Prompt Tree",
+  "version": "1.0.0",
+  "created": "2026-08-18",
+  "description": "Dependency-ordered prompt system for executing and extending the RideJaunm design programme. Nodes inherit locked constraints from their parents and emit machine-readable handoffs to their children.",
+  "project": {
+    "name": "RideJaunm",
+    "domain": "Motorcycle riding companion app for Nepal",
+    "design_direction": "Himalayan-Tactical Tech",
+    "spec_status": "Phases 1-8 merged to main",
+    "authority_order": [
+      "tokens/ridejaunm.tokens.json",
+      "docs/01-09",
+      "prompts/ (this tree)",
+      "LLM output (draft until reviewed)"
+    ]
+  },
+
+  "execution_modes": {
+    "GENERATE": "Greenfield. Full output from scratch. Use only for new feature areas with no existing spec.",
+    "EXTEND": "DEFAULT. Spec exists; produce only the delta. Cite what already covers the rest.",
+    "AUDIT": "No new design. Return a findings table with severity and file:section references."
+  },
+
+  "requirement_tags": {
+    "NEW": "Genuinely missing from docs/. This is where the value is.",
+    "EXTEND": "Partially covered; needs depth, a variant, or a missing case.",
+    "VALIDATE": "Already specified. Verify against docs/, do not regenerate."
+  },
+
+  "shared_assets": {
+    "context_payload": "_shared/context-payload.md",
+    "guardrails": "_shared/guardrails.md",
+    "output_contract": "_shared/output-contract.md"
+  },
+
+  "assembly_order": [
+    "_shared/context-payload.md (only if model lacks repo access)",
+    "_shared/guardrails.md (always)",
+    "parent HANDOFF blocks (per node 'inherits')",
+    "the node prompt",
+    "_shared/output-contract.md (always)"
+  ],
+
+  "nodes": [
+    {
+      "id": "root",
+      "type": "root",
+      "label": "Pre-Flight Alignment & Scoping",
+      "file": "00-root-node.md",
+      "status": "ANSWERED_AND_LOCKED",
+      "resolved": "2026-08-18",
+      "phases": [],
+      "inherits": [],
+      "emits": ["LOCKED_CONSTRAINTS"],
+      "blocks": ["1A", "1B", "2A", "2B", "3A", "3B"],
+      "questions": [
+        {
+          "id": "Q1",
+          "question": "Environmental context: handlebar-mounted in Himalayan sun, or tank bag?",
+          "answer": "Handlebar-mounted, direct sun, gloved. Primary and non-negotiable. Tank bag is a subset.",
+          "blast_radius_if_changed": "CATASTROPHIC — full re-spec of sizing, type, contrast, modes, testing"
+        },
+        {
+          "id": "Q2",
+          "question": "Visual vibe: rugged tactical or cyber-tech neon?",
+          "answer": "Hybrid — Himalayan-Tactical Tech. Tactical base + exactly one neon accent, allocated by surface class.",
+          "blast_radius_if_changed": "HIGH — docs/01, 03, 07 and all hi-fi; structure survives"
+        },
+        {
+          "id": "Q3",
+          "question": "Map engine: vector or satellite-terrain?",
+          "answer": "Both, switchable. Satellite-3D while riding; vector while planning; vector offline; vector in day-glare.",
+          "blast_radius_if_changed": "MEDIUM — map style, tile budget, Branch 3 layouts"
+        },
+        {
+          "id": "Q4",
+          "question": "SOS mesh UI: technical signal data or consumer-friendly?",
+          "answer": "Progressive disclosure. Plain language default (state + magnitude + age); technical diagnostics one tap away, never buried.",
+          "blast_radius_if_changed": "LOW-MEDIUM — contained to the SOS subsystem"
+        }
+      ]
+    },
+
+    {
+      "id": "1A",
+      "branch": 1,
+      "label": "Visual Identity & Colour Tokens",
+      "file": "01-branch-brand-design-system.md",
+      "phases": [1, 3],
+      "inherits": ["LOCKED_CONSTRAINTS"],
+      "emits": ["COLOR_CONTRACT", "PERSONA_SET"],
+      "consumed_by": ["2A", "3A", "3B"],
+      "parallel_with": ["1B"],
+      "default_mode": "EXTEND",
+      "safety_critical": false,
+      "requirements": [
+        { "id": "R1", "tag": "NEW", "title": "Three rider sub-culture personas + feature priority matrix", "value": "highest" },
+        { "id": "R2", "tag": "VALIDATE", "title": "12 semantic colour roles, night vs day-glare reference table" },
+        { "id": "R3", "tag": "EXTEND", "title": "Route colours validated over 4 Nepali terrain backdrops (4x3 matrix)" },
+        { "id": "R4", "tag": "VALIDATE", "title": "SOS Red WCAG AAA honesty check + triple-coding rationale" }
+      ],
+      "known_gap": "docs/01 defines brand pillars but no personas. Largest gap in the brand layer."
+    },
+
+    {
+      "id": "1B",
+      "branch": 1,
+      "label": "Glanceable Typography & Scale",
+      "file": "01-branch-brand-design-system.md",
+      "phases": [2],
+      "inherits": ["LOCKED_CONSTRAINTS"],
+      "emits": ["TYPE_CONTRACT"],
+      "consumed_by": ["2A", "3A", "3B"],
+      "parallel_with": ["1A"],
+      "default_mode": "EXTEND",
+      "safety_critical": false,
+      "requirements": [
+        { "id": "R1", "tag": "EXTEND", "title": "Two font pairings compared via letterform-confusion audit", "value": "high" },
+        { "id": "R2", "tag": "EXTEND", "title": "Add glance-distance + vibration-verdict columns; produce in-ride permitted shortlist" },
+        { "id": "R3", "tag": "NEW", "title": "Telemetry micro-typography: speedometer, altimeter, connection status", "value": "highest" },
+        { "id": "R4", "tag": "NEW", "title": "Formal blur-test spec + remediation ladder" }
+      ],
+      "known_gap": "Scale is complete but optical/telemetry detail (digit reservation, roll behaviour, stale treatment) is unspecified."
+    },
+
+    {
+      "id": "2A",
+      "branch": 2,
+      "label": "Atomic & Molecular Design Tokens",
+      "file": "02-branch-figma-architecture.md",
+      "phases": [4],
+      "inherits": ["LOCKED_CONSTRAINTS", "COLOR_CONTRACT", "TYPE_CONTRACT"],
+      "emits": ["COMPONENT_CONTRACT"],
+      "consumed_by": ["2B", "3A", "3B"],
+      "default_mode": "EXTEND",
+      "safety_critical": true,
+      "safety_note": "Includes Button/SOS. Failure-mode analysis mandatory.",
+      "requirements": [
+        { "id": "R1", "tag": "NEW", "title": "Auto-Layout + constraint spec for Button/Primary, incl. over-map states" },
+        { "id": "R2", "tag": "EXTEND", "title": "Button/SOS frame-by-frame timeline + failure-mode analysis", "value": "highest" },
+        { "id": "R3", "tag": "EXTEND", "title": "Card/TelemetryHUD nested Auto-Layout tree + width reservation" },
+        { "id": "R4", "tag": "EXTEND", "title": "Interaction state matrix x thumb-reach zones" }
+      ],
+      "known_gap": "docs/04 describes components behaviourally but not their Figma construction mechanics."
+    },
+
+    {
+      "id": "2B",
+      "branch": 2,
+      "label": "Canvas Structure & Design Operations",
+      "file": "02-branch-figma-architecture.md",
+      "phases": [8],
+      "inherits": ["LOCKED_CONSTRAINTS", "COMPONENT_CONTRACT"],
+      "emits": ["FIGMA_OPS_CONTRACT"],
+      "consumed_by": [],
+      "default_mode": "EXTEND",
+      "safety_critical": false,
+      "requirements": [
+        { "id": "R1", "tag": "EXTEND", "title": "Page structure dev-mode status + Doc/Spec schema + variable-to-code mapping" },
+        { "id": "R2", "tag": "NEW", "title": "Remap 3-stage/10-week roadmap into 4 sprints, preserving all 38 tasks" },
+        { "id": "R3", "tag": "NEW", "title": "Control/RouteMode Figma Component Property schema + variant-count control", "value": "highest" }
+      ],
+      "known_gap": "docs/08 has the file structure and roadmap but no property schemas and no 4-sprint framing."
+    },
+
+    {
+      "id": "3A",
+      "branch": 3,
+      "label": "Navigation HUD & 3D Routing UI",
+      "file": "03-branch-ux-flows-safety.md",
+      "phases": [5, 6],
+      "screens": ["Screen 1 — Map Home / HUD", "Screen 2 — Trip Planner"],
+      "inherits": ["LOCKED_CONSTRAINTS", "COLOR_CONTRACT", "TYPE_CONTRACT", "COMPONENT_CONTRACT"],
+      "emits": ["HUD_CONTRACT"],
+      "consumed_by": ["3B"],
+      "default_mode": "EXTEND",
+      "safety_critical": false,
+      "requirements": [
+        { "id": "R1", "tag": "NEW", "title": "Supercurvy Group Trip: Kathmandu to Pokhara, step by step", "value": "highest",
+          "why_hard": "Prithvi Highway is the STRAIGHT corridor. Supercurvy must divert via Nuwakot/Bandipur, costing ~+90km and ~+2.5h. Core UX problem: sell that as a reward, not an error." },
+        { "id": "R2", "tag": "EXTEND", "title": "3D viewport occlusion budget, protected route corridor, pitch scaling, speed-based chrome ladder" },
+        { "id": "R3", "tag": "EXTEND", "title": "Bottom nav reach geometry, left-mount mirroring, SOS tab geometry, collapse choreography" }
+      ],
+      "known_gap": "docs/05 Flow A covers Kathmandu-Daman (Rajpath). Pokhara is a structurally different routing problem."
+    },
+
+    {
+      "id": "3B",
+      "branch": 3,
+      "label": "Dual-Mode SOS & Community Infrastructure",
+      "file": "03-branch-ux-flows-safety.md",
+      "phases": [5, 6, 7],
+      "screens": ["Screen 3 — Community Feed", "Screen 4 — Emergency SOS Console"],
+      "inherits": ["LOCKED_CONSTRAINTS", "COLOR_CONTRACT", "TYPE_CONTRACT", "COMPONENT_CONTRACT", "HUD_CONTRACT"],
+      "emits": ["SAFETY_CONTRACT", "FEED_CONTRACT"],
+      "consumed_by": [],
+      "default_mode": "EXTEND",
+      "safety_critical": true,
+      "safety_note": "Requires a second human reviewer and explicit failure-mode statements before merge.",
+      "requirements": [
+        { "id": "R1", "tag": "NEW", "title": "Online-to-offline transition choreography (timed table) + banner state machine" },
+        { "id": "R2", "tag": "EXTEND", "title": "Widget/MeshTopology + Widget/SignalMatrix internals + broadcast status" },
+        { "id": "R3", "tag": "NEW", "title": "The responder side — alert receipt, ACK, navigate-to-victim, coordination, relay role, all-clear", "value": "highest",
+          "why_hard": "Half of the SOS feature is the other rider's screens, and they are currently one line in docs/05." },
+        { "id": "R4", "tag": "EXTEND", "title": "Feed card hi-fi: aspect ratios, truncation, route strip, elevation, variants" },
+        { "id": "R5", "tag": "EXTEND", "title": "Three NEW micro-interactions validating background operations" }
+      ],
+      "known_gap": "Transition choreography and the entire responder experience are unspecified."
+    }
+  ],
+
+  "edges": [
+    { "from": "root", "to": "1A", "carries": "LOCKED_CONSTRAINTS" },
+    { "from": "root", "to": "1B", "carries": "LOCKED_CONSTRAINTS" },
+    { "from": "1A", "to": "2A", "carries": "COLOR_CONTRACT" },
+    { "from": "1B", "to": "2A", "carries": "TYPE_CONTRACT" },
+    { "from": "2A", "to": "2B", "carries": "COMPONENT_CONTRACT" },
+    { "from": "1A", "to": "3A", "carries": "COLOR_CONTRACT" },
+    { "from": "1B", "to": "3A", "carries": "TYPE_CONTRACT" },
+    { "from": "2A", "to": "3A", "carries": "COMPONENT_CONTRACT" },
+    { "from": "3A", "to": "3B", "carries": "HUD_CONTRACT" },
+    { "from": "2A", "to": "3B", "carries": "COMPONENT_CONTRACT" },
+    { "from": "1A", "to": "3B", "carries": "COLOR_CONTRACT" }
+  ],
+
+  "critical_path": ["root", "1A", "2A", "3A", "3B"],
+  "parallelisable": [["1A", "1B"]],
+
+  "gates": [
+    {
+      "after": "branch_1",
+      "checks": [
+        "COLOR_CONTRACT returned with all 12 semantic roles in both modes",
+        "PERSONA_SET returned with a declared design-default persona",
+        "Route-over-terrain matrix has no unresolved FAIL cells",
+        "TYPE_CONTRACT returned with the in-ride permitted shortlist",
+        "No untriaged proposed tokens",
+        "Both nodes self-scored >= 8/10"
+      ]
+    },
+    {
+      "after": "branch_2",
+      "checks": [
+        "COMPONENT_CONTRACT has buildable Auto-Layout specs",
+        "Button/SOS failure-mode analysis covers accidental-fire AND silent-failure",
+        "Telemetry width-reservation values are numeric",
+        "Control/RouteMode variant count computed and under ~40",
+        "4-sprint remap preserves all 38 tasks and honours tokens-before-hi-fi",
+        "Both nodes self-scored >= 8/10"
+      ]
+    },
+    {
+      "after": "branch_3",
+      "checks": [
+        "Kathmandu-Pokhara flow honestly discloses the Supercurvy time penalty",
+        "Occlusion arithmetic shown; no state breaches 45%",
+        "Offline transition debounce survives a 5-second tunnel",
+        "Responder side specified to the same depth as the victim side",
+        "0-peer mesh state is honest and actionable",
+        "Every safety-critical item states both failure modes",
+        "SECOND HUMAN REVIEWER signed off on 3B",
+        "Both nodes self-scored >= 8/10"
+      ]
+    }
+  ],
+
+  "self_check_ids": [
+    "SC-01 no invented hex", "SC-02 no second red", "SC-03 never colour alone",
+    "SC-04 tap targets stated", "SC-05 type resolves to scale", "SC-06 contrast floors",
+    "SC-07 offline specified", "SC-08 four theme modes", "SC-09 real Nepali content",
+    "SC-10 glass mode-conditional", "SC-11 requirements tagged", "SC-12 failure modes",
+    "SC-13 no scope creep", "SC-14 handoff valid"
+  ],
+
+  "scoring": {
+    "criteria": [
+      { "name": "Buildability", "weight": 2 },
+      { "name": "Constraint fidelity", "weight": 2 },
+      { "name": "Delta focus", "weight": 1 },
+      { "name": "Nepal specificity", "weight": 1 },
+      { "name": "Honest states", "weight": 1 },
+      { "name": "Rationale quality", "weight": 1 },
+      { "name": "Precision", "weight": 1 },
+      { "name": "Handoff integrity", "weight": 1 }
+    ],
+    "thresholds": { "ship": 9, "ship_with_issues": 8, "rerun_below": 8 }
+  },
+
+  "amendment_policy": {
+    "trigger": "Any change to a root-node answer or a LOCKED_CONSTRAINT",
+    "steps": [
+      "Open an issue titled 'root-amendment: <what>'",
+      "State the blast radius (nodes + docs invalidated)",
+      "Bump tree version — root changes are always MAJOR",
+      "Re-run affected nodes in AUDIT mode before EXTEND",
+      "Update 00-root-node.md with answer, date and reason"
+    ],
+    "forbidden": "Silently editing a locked constraint"
+  }
+}
