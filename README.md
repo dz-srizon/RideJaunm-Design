@@ -25,6 +25,9 @@ Every specification here is written to be *transcribable* — a designer should 
 document and build the corresponding Figma page without inventing anything, and an engineer
 should be able to read the same document and know what the thing must do.
 
+The [`prompts/`](prompts/README.md) tree turns those decisions into loadable instructions, so a
+designer, copywriter, reviewer or agent can produce on-brand work without re-deriving the law.
+
 ---
 
 ## 🗂️ Repository structure
@@ -44,8 +47,15 @@ RideJaunm-Design/
 │   ├── 07-hifi-specifications.md      PHASE 7 · Visual styling + micro-interactions
 │   ├── 08-figma-setup-roadmap.md      PHASE 8 · Figma structure + 10-week roadmap
 │   └── 09-nepal-offline-data-spec.md  APPENDIX A · Nepal offline map data fields
-└── tokens/
-    └── ridejaunm.tokens.json          Machine-readable design tokens (W3C DTCG format)
+├── tokens/
+│   └── ridejaunm.tokens.json          Machine-readable design tokens (W3C DTCG format)
+└── prompts/                           Prompt Tree v1.0.0 — loadable instructions
+    ├── README.md                      How to run a session
+    ├── TREE.md                        Visual index
+    ├── catalog.json                   Machine-readable node catalogue
+    ├── 00-root/                       System, constitution, output contract
+    ├── branches/                      13 domain branches, 31 leaves
+    └── packs/                         designer · copy · safety-review · agent
 ```
 
 ---
@@ -63,6 +73,7 @@ RideJaunm-Design/
 | **7** | [Hi-Fi Specifications](docs/07-hifi-specifications.md) | The 8-step lo-fi→hi-fi transition protocol, a 7-layer elevation system, glassmorphism rules that survive a moving satellite map, radius language, and **3 mandatory micro-interactions**. |
 | **8** | [Figma Setup & Roadmap](docs/08-figma-setup-roadmap.md) | The exact Figma team/file/page structure, naming conventions, permissions, plugin set, and a gated **10-week roadmap** (Foundations → Structure → Hi-Fi & Handoff). |
 | **A** | [Nepal Offline Data Spec](docs/09-nepal-offline-data-spec.md) | ~90 Nepal-specific offline data fields: surface quality, monsoon/landslide risk, fuel gaps, permit zones, heli landing zones, cell dead-zones, BS calendar, bandh alerts. |
+| **P** | [Prompt Tree v1.0.0](prompts/README.md) | Hierarchical, pack-composed prompts that encode the locked decisions so humans and agents transcribe rather than invent. SOS is a restricted branch with a mandatory gate. |
 
 ---
 
@@ -207,9 +218,12 @@ We do not validate designs in an office.
    [`tokens/ridejaunm.tokens.json`](tokens/ridejaunm.tokens.json) or Phase 3.
 3. Any change to a safety-critical surface (SOS, crash detection, emergency contacts,
    mesh broadcast) requires a second reviewer and a note in the PR describing the failure mode.
-4. Keep binaries out of Git. `.fig`, `.psd`, raw photography, map tiles and video are ignored by
+   Load [`packs/safety-review`](prompts/packs/safety-review.md) before drafting the change.
+4. Prefer composing a session from the [Prompt Tree](prompts/README.md) over a blank chat.
+   Do not invent node ids; use [`prompts/catalog.json`](prompts/catalog.json).
+5. Keep binaries out of Git. `.fig`, `.psd`, raw photography, map tiles and video are ignored by
    design — link them from the shared drive instead.
-5. Update the relevant Deliverables Checklist when you complete work.
+6. Update the relevant Deliverables Checklist when you complete work.
 
 ---
 
