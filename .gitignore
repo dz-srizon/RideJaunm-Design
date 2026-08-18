@@ -1,0 +1,139 @@
+# ──────────────────────────────────────────────────────────────
+# RideJaunm-Design — .gitignore
+# Design-ops repository (Figma specs, tokens, exported assets)
+# ──────────────────────────────────────────────────────────────
+
+# ── OS cruft ──────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+.AppleDouble
+.LSOverride
+Icon?
+ehthumbs.db
+Thumbs.db
+Thumbs.db:encryptable
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+.directory
+.Trash-*
+
+# ── Editors / IDEs ────────────────────────────────────────────
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+.history/
+*.sublime-workspace
+
+# ── Node / tooling (token pipeline, icon build, plugins) ──────
+node_modules/
+dist/
+build/
+out/
+coverage/
+.cache/
+.parcel-cache/
+.turbo/
+.next/
+.svelte-kit/
+.vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.pnpm-store/
+.eslintcache
+.stylelintcache
+
+# ── Environment & secrets (Figma PATs, Mapbox keys, webhooks) ─
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.mobileprovision
+secrets.json
+figma-token.txt
+.netrc
+
+# ── Binary design source files ────────────────────────────────
+# Figma is the source of truth and lives in the cloud.
+# Never commit heavyweight binaries — link them in docs instead.
+*.fig
+*.sketch
+*.xd
+*.afdesign
+*.afphoto
+*.psd
+*.ai
+*.indd
+*.aep
+*.prproj
+*.blend
+
+# ── Heavy raster / video / map assets ─────────────────────────
+# Moodboards, competitor screenshots, terrain photography and
+# map tiles belong in the shared drive / Figma, not in Git.
+assets/raw/**
+assets/moodboard/**
+assets/screenshots/**
+assets/renders/**
+assets/video/**
+*.mp4
+*.mov
+*.webm
+*.gif
+*.tiff
+*.tif
+*.psb
+*.zip
+*.rar
+*.7z
+
+# Allow curated, lightweight, versioned artwork
+!assets/brand/**
+!assets/icons/**
+!assets/export/**
+!**/*.svg
+!**/*.webp
+
+# ── Offline map / geodata fixtures (huge, regenerate instead) ──
+*.mbtiles
+*.pmtiles
+*.osm.pbf
+*.gpkg
+*.sqlite
+*.mmpk
+data/tiles/**
+data/dem/**
+data/cache/**
+!data/**/*.sample.geojson
+!data/**/README.md
+
+# ── Generated token / handoff output ──────────────────────────
+tokens/build/**
+tokens/*.generated.*
+handoff/generated/**
+storybook-static/
+*.log
+tmp/
+temp/
+.scratch/
+
+# ── Fonts (licensing) ─────────────────────────────────────────
+# Reference Google Fonts by name; do not vendor foundry files.
+assets/fonts/**
+!assets/fonts/README.md
+*.otf
+*.ttf
+!*.woff2
