@@ -25,6 +25,10 @@ Every specification here is written to be *transcribable* — a designer should 
 document and build the corresponding Figma page without inventing anything, and an engineer
 should be able to read the same document and know what the thing must do.
 
+The eight phases below are **merged and authoritative**. To extend them without drift, use the
+[**Prompt Tree**](prompts/README.md) — a dependency-ordered prompt system where each node
+inherits locked decisions from its parents and emits a machine-readable handoff to its children.
+
 ---
 
 ## 🗂️ Repository structure
@@ -34,6 +38,14 @@ RideJaunm-Design/
 ├── README.md                          ← you are here
 ├── LICENSE
 ├── .gitignore
+├── prompts/                           🌳 Prompt Tree — how to extend this spec consistently
+│   ├── README.md                      Tree map, execution modes, how to run it
+│   ├── 00-root-node.md                4 scoping questions — ANSWERED & LOCKED
+│   ├── 01-branch-brand-design-system.md   Sub-prompts 1A + 1B
+│   ├── 02-branch-figma-architecture.md    Sub-prompts 2A + 2B
+│   ├── 03-branch-ux-flows-safety.md       Sub-prompts 3A + 3B
+│   ├── _shared/                       Context payload, guardrails, output contract
+│   └── ridejaunm.prompt-tree.json     Machine-readable tree
 ├── docs/
 │   ├── 01-brand-identity.md           PHASE 1 · Brand, mood, reference aggregation
 │   ├── 02-typography.md               PHASE 2 · Fonts + full type scale matrix
@@ -63,6 +75,29 @@ RideJaunm-Design/
 | **7** | [Hi-Fi Specifications](docs/07-hifi-specifications.md) | The 8-step lo-fi→hi-fi transition protocol, a 7-layer elevation system, glassmorphism rules that survive a moving satellite map, radius language, and **3 mandatory micro-interactions**. |
 | **8** | [Figma Setup & Roadmap](docs/08-figma-setup-roadmap.md) | The exact Figma team/file/page structure, naming conventions, permissions, plugin set, and a gated **10-week roadmap** (Foundations → Structure → Hi-Fi & Handoff). |
 | **A** | [Nepal Offline Data Spec](docs/09-nepal-offline-data-spec.md) | ~90 Nepal-specific offline data fields: surface quality, monsoon/landslide risk, fuel gaps, permit zones, heli landing zones, cell dead-zones, BS calendar, bandh alerts. |
+
+---
+
+## 🌳 Extending this spec — the Prompt Tree
+
+The eight phases above are **merged and authoritative**. To extend them without drift, use the
+[**Prompt Tree**](prompts/README.md) — a dependency-ordered prompt system where each node
+inherits locked decisions from its parents and emits a machine-readable handoff to its children.
+
+```
+🛑 ROOT — Pre-Flight Scoping                    ✅ ANSWERED & LOCKED
+   ├── 🌿 Branch 1 — Brand & Design System      1A Colour · 1B Typography
+   ├── 🌿 Branch 2 — Figma Architecture         2A Components · 2B Canvas & Ops
+   └── 🌿 Branch 3 — UX, Flows & Safety         3A Map HUD · 3B SOS & Community
+```
+
+Default execution mode is **`EXTEND`** — produce only the delta, never regenerate merged work.
+Every requirement is tagged 🆕 NEW / 🔁 EXTEND / ✅ VALIDATE so effort lands on the real gaps.
+
+**The biggest gaps the tree targets today:** rider sub-culture personas (1A), telemetry
+micro-typography (1B), Figma Auto-Layout mechanics (2A), the `Control/RouteMode` property
+schema (2B), the Kathmandu→Pokhara Supercurvy flow (3A), and **the entire responder side of
+the SOS system** (3B).
 
 ---
 
@@ -207,9 +242,12 @@ We do not validate designs in an office.
    [`tokens/ridejaunm.tokens.json`](tokens/ridejaunm.tokens.json) or Phase 3.
 3. Any change to a safety-critical surface (SOS, crash detection, emergency contacts,
    mesh broadcast) requires a second reviewer and a note in the PR describing the failure mode.
-4. Keep binaries out of Git. `.fig`, `.psd`, raw photography, map tiles and video are ignored by
+   Run node **3B** from the [Prompt Tree](prompts/03-branch-ux-flows-safety.md) before drafting.
+4. Prefer composing a session from the [Prompt Tree](prompts/README.md) over a blank chat.
+   Default mode is `EXTEND`. Do not invent node ids; use [`prompts/ridejaunm.prompt-tree.json`](prompts/ridejaunm.prompt-tree.json).
+5. Keep binaries out of Git. `.fig`, `.psd`, raw photography, map tiles and video are ignored by
    design — link them from the shared drive instead.
-5. Update the relevant Deliverables Checklist when you complete work.
+6. Update the relevant Deliverables Checklist when you complete work.
 
 ---
 
